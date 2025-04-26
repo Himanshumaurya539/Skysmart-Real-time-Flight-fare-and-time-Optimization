@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Booking</title>
+    <link rel="stylesheet" href="/static/contact.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <div class="nav-container">
+
+            <div class="logo-left">
+                <div class="logo">
+                    <span class="sky">Sky</span><span class="smart">Smart</span>
+                </div>
+            </div>
+
+            <div class="menu-toggle">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="offers.html">OFFERS</a></li>
+                <li><a href="hotels.html">HOTELS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </div>
+
+        <!-- login button -->
+        <div class="auth-buttons">
+            {% if session.get('loggedin') %}
+            <span class="welcome-text">👋 Welcome, {{ session['name'] }}!</span>
+            <a href="{{ url_for('logout') }}">
+                <button class="btn logout">Logout</button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('login') }}">
+                <button class="btn login">Login</button>
+            </a>
+            <a href="{{ url_for('signup') }}">
+                <button class="btn signup">Sign Up</button>
+            </a>
+            {% endif %}
+        </div>
+
+    </header>
+
+    <!-- 🔹 Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <h2>Drop Your Experience !</h2>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age Group:</label>
+                <select id="age" required>
+                    <option value="">Select your age group</option>
+                    <option value="18-25">18-25</option>
+                    <option value="26-35">26-35</option>
+                    <option value="36-45">36-45</option>
+                    <option value="46-60">46-60</option>
+                    <option value="60+">60+</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" required>
+                    <option value="">Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="airline">Which Airline Did You Travel With?</label>
+                <select id="airline" required>
+                    <option value="">Select an airline</option>
+                    <option value="IndiGo">IndiGo</option>
+                    <option value="Air India">Air India</option>
+                    <option value="SpiceJet">SpiceJet</option>
+                    <option value="GoAir">GoAir</option>
+                    <option value="Vistara">Vistara</option>
+                    <option value="AirAsia India">AirAsia India</option>
+                    <option value="Alliance Air">Alliance Air</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="experience">User Experience:</label>
+                <select id="experience" required>
+                    <option value="">Select an option</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bookingProcess">Booking Process:</label>
+                <select id="bookingProcess" required>
+                    <option value="">Select an option</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="flightInfo">Flight Information Accuracy:</label>
+                <select id="flightInfo" required>
+                    <option value="">Select an option</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="support">Customer Support:</label>
+                <select id="support" required>
+                    <option value="">Select an option</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="query">Any Query or Suggestion:</label>
+                <textarea id="query" rows="4" placeholder="Write your query or suggestion here..." required></textarea>
+            </div>
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+    <div class="contact-info right-info">
+        <p><strong>Support Email:</strong></p>
+        <p>support@skysmart.com</p>
+        <p>helpdesk@skysmart.com</p>
+    </div>
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            let inputs = document.querySelectorAll('#feedbackForm input, #feedbackForm select, #feedbackForm textarea');
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    alert('All fields are required!');
+                    return;
+                }
+            }
+            alert('Thank you for your feedback!');
+        });
+    </script>
+
+</body>
+
+</html>

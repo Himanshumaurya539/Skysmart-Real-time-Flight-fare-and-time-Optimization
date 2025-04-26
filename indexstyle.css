@@ -1,0 +1,595 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+
+
+}
+
+header {
+    background: linear-gradient(90deg, #063970, #62c1e5);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+
+/* Styling for the logo text */
+.logo {
+    font-family: 'Arial', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+}
+
+/* Color and shadow for "Sky" */
+.sky {
+    color: #ffffff;
+    /* White for "Sky" */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    /* Subtle shadow */
+}
+
+/* Color and shadow for "Smart" */
+.smart {
+    color: #ffcc00;
+    /* Gold for "Smart" */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    /* Subtle shadow */
+    margin-left: 5px;
+}
+
+/* Decorative circle before the logo */
+.logo:before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffcc00;
+    /* Gold circle */
+    margin-right: 10px;
+    display: inline-block;
+}
+
+/* Decorative line after the logo */
+.logo:after {
+    content: '';
+    width: 15px;
+    height: 2px;
+    background: #ffffff;
+    /* White line */
+    margin-left: 10px;
+    display: inline-block;
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffeb3b;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-buttons button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.auth-buttons .login {
+    background: #063970;
+    color: white;
+}
+
+.auth-buttons .login:hover {
+    background: #007bff;
+}
+
+.auth-buttons .signup {
+    background: #1e7e34;
+    color: white;
+}
+
+.auth-buttons .signup:hover {
+    background: #28a745;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        padding: 10px 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+}
+
+
+/* Home Page */
+.home {
+    text-align: center;
+}
+
+.booking-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    justify-content: center;
+    max-width: 600px;
+    margin: 2rem auto;
+
+}
+
+.booking-form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form button {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+}
+
+.booking-form button {
+    background: #39597a;
+    color: white;
+    cursor: pointer;
+}
+
+.booking-form button:hover {
+    background: #0056b3;
+}
+
+/* hero section  */
+.hero {
+    text-align: center;
+    /* background-image: url('https://wallpaperaccess.com/full/1363125.jpg'); Add your sky image here */
+    padding: 3rem 1rem;
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    /* Adjusted height for better visibility */
+    background-color: #eef2f3;
+    /* Added background to differentiate */
+}
+
+.hero h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-image {
+    width: 150px;
+    /* Adjust image size */
+    height: auto;
+}
+
+.plane-animation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    animation: flyAcross 10s linear infinite;
+    display: flex;
+    align-items: center;
+}
+
+.plane-banner {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    transform: translateY(-50%);
+    animation: flyAcross 50s linear infinite;
+}
+
+@keyframes flyAcross {
+    0% {
+        transform: translate(-150px, -50%);
+    }
+
+    100% {
+        transform: translate(100vw, -50%);
+    }
+}
+
+.banner {
+    background-color: #063970;
+    /* Yellow banner */
+    color: white;
+    /* Black text */
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-left: -10px;
+    /* Overlap slightly with the plane */
+    border-radius: 0 20px 20px 0;
+    /* Rounded edges on one side */
+    white-space: nowrap;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.banner p {
+    margin: 0;
+}
+
+/* Search Section  */
+.booking-section {
+    max-width: 1200px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+.trip-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.trip-options input[type="radio"] {
+    display: none;
+}
+
+.trip-options label {
+    padding: 10px 20px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.trip-options input[type="radio"]:checked+label {
+    background-color: #063970;
+    color: white;
+}
+
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 50px;
+}
+
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #063970;
+    box-shadow: 0 0 5px rgba(25, 180, 232, 0.5);
+}
+
+.search-btn {
+    position: absolute;
+    /* Position the button absolutely */
+    bottom: 230px;
+    /* Move it outside the frame */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #063970;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-btn:hover {
+    background-color: #207788;
+}
+
+
+.icon-swap {
+    background: url('swap-icon.png') no-repeat center center;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    align-self: center;
+    cursor: pointer;
+}
+
+#return-group {
+    display: none;
+    /* Hidden by default for one-way */
+}
+
+.travel-support {
+    padding: 2rem;
+    background-color: #fff;
+    text-align: center;
+}
+
+.travel-support h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.travel-support p {
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.support-list {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.support-item {
+    max-width: 200px;
+    text-align: left;
+}
+
+.support-item h3 {
+    font-size: 2rem;
+    color: #4a56e2;
+}
+
+.support-item h4 {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+.support-item p {
+    color: #555;
+}
+
+/* last container  */
+.container {
+    max-width: 1000x;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-style: oblique;
+    margin-bottom: 20px;
+    color: #063970;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.card a {
+    display: block;
+    padding: 15px;
+    font-size: 1.2rem;
+    color: #063970;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.card a:hover {
+    color: #063970;
+}
+
+@media (max-width: 300px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .card img {
+        height: 50px;
+    }
+
+    .card a {
+        font-size: 1rem;
+    }
+}
+
+
+
+/* Login session   */
+.book-button {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+    background-color: #005bb5;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 5px;
+    text-align: center;
+    width: 300px;
+}
+
+.modal-content input {
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.close-modal {
+    background-color: #ccc;
+    color: black;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.close-modal:hover {
+    background-color: #999;
+}
+
+
+
+
+
+
+
+
+.flash-messages {
+    padding: 10px;
+    margin: 10px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .alert {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .alert-success {
+    background-color: #28a745;
+  }
+  
+  .alert-warning {
+    background-color: #ffc107;
+    color: black;
+  }
+  
+  .alert-danger {
+    background-color: #dc3545;
+  }
+  
+  .alert-info {
+    background-color: #17a2b8;
+  }
+  

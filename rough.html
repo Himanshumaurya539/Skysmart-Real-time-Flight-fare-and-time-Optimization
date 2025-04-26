@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkySmart</title>
+    <link rel="stylesheet" href="/static/rough.css">
+
+</head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', function () {
+            navLinks.classList.toggle('active');
+        });
+    });
+
+    /* Search Section  */
+    document.addEventListener("DOMContentLoaded", () => {
+        const tripTypeRadios = document.querySelectorAll('input[name="trip"]');
+        const returnGroup = document.getElementById("return-group");
+        const swapBtn = document.getElementById("swap-btn");
+        const fromInput = document.getElementById("from");
+        const toInput = document.getElementById("to");
+
+        // Toggle the visibility of the return date input based on trip type
+        tripTypeRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                if (radio.value === "round-trip") {
+                    returnGroup.style.display = "block";
+                } else {
+                    returnGroup.style.display = "none";
+                }
+            });
+        });
+
+        // Swap the values of the "From" and "To" fields
+        swapBtn.addEventListener("click", () => {
+            const temp = fromInput.value;
+            fromInput.value = toInput.value;
+            toInput.value = temp;
+        });
+
+        // Handle form submission
+        const form = document.getElementById("flight-form");
+        form.addEventListener("submit", (e) => {
+            e.preventDefault(); // Prevent actual submission for now
+            alert("Flight search initiated with the selected options!");
+        });
+    });
+
+    // Login session
+    document.getElementById("signupForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        fetch("/signup", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error("Error:", error));
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        fetch("/login", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    window.location.href = "/";
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    });
+    // SEARCH Button validation and navigation 
+    function redirectToResults() {
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
+        let departure = document.getElementById("departure").value;
+        let travellers = document.getElementById("travellers").value;
+
+        if (!from || !to || !departure) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
+        // Redirect to result.html with query parameters
+        window.location.href = `/search-results?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&departure=${encodeURIComponent(departure)}&travellers=${encodeURIComponent(travellers)}`;
+    }
+
+
+</script>
+
+
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <div class="nav-container">
+
+            <div class="logo-left">
+                <div class="logo">
+                    <span class="sky">Sky</span><span class="smart">Smart</span>
+                </div>
+            </div>
+
+            <div class="menu-toggle">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="rough.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="offers.html">OFFERS</a></li>
+                <li><a href="hotels.html">HOTELS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </div>
+         <!-- login/logout buttons -->
+         <div class="auth-buttons">
+            {% if session['loggedin'] %}
+            <span>Welcome, {{ session.get('name') }}!</span>
+            <a href="/logout"><button class="logout">Logout</button></a>
+            {% else %}
+            <a href="/login"><button class="login">Login</button></a>
+            <a href="/signup"><button class="signup">Sign Up</button></a>
+            {% endif %}
+        </div>
+    </header>
+
+
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="plane-animation">
+            <div class="banner">
+                <p>Find And Book A Great Experience</p>
+            </div>
+            <img src="/static/download.png" alt="Plane Image" class="hero-image">
+        </div>
+    </section>
+
+
+
+    <!-- Search Section -->
+    <section>
+        <div class="booking-section">
+            <div class="trip-options">
+                <input type="radio" id="one-way" name="trip-type" checked>
+                <label for="one-way">One-way</label>
+                <input type="radio" id="round-trip" name="trip-type">
+                <label for="round-trip">Round-trip</label>
+                <input type="radio" id="multi-city" name="trip-type">
+                <label for="multi-city">Multi-city</label>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="from">From</label>
+                    <input type="text" id="from" placeholder="Enter city or airport">
+                </div>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="text" id="to" placeholder="Enter city or airport">
+                </div>
+                <div class="form-group">
+                    <label for="departure">Departure Date</label>
+                    <input type="date" id="departure">
+                </div>
+
+                <div class="form-group">
+                    <label for="travellers">Travellers & Class</label>
+                    <select id="travellers">
+                        <option>1 Adult - Economy</option>
+                        <option>2 Adults - Economy</option>
+                        <option>1 Adult - Business</option>
+                    </select>
+                </div>
+                <!-- SEARCH Button at the border -->
+                <button class="search-btn" onclick="validateForm()">Search Flights</button>
+
+    </section>
+
+
+    <div class="container">
+        <h2>Famous Tourist Attractions <span class="flag"></span></h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://nandanamtours.com/wp-content/uploads/2020/01/l.jpg" alt="Lakshadweep">
+                <a href="https://en.wikipedia.org/wiki/Lakshadweep">Lakshadweep</a>
+            </div>
+            <div class="card">
+                <img src="https://www.indiatravelblog.net/wp-content/uploads/2019/09/ishan-das-RdPEdHdL_BU-unsplash.jpg"
+                    alt="Andaman">
+                <a href="https://en.wikipedia.org/wiki/Andaman_and_Nicobar_Islands">Andaman</a>
+            </div>
+            <div class="card">
+                <img src="https://wallpapercave.com/wp/wp2678269.jpg" alt="Kashmir">
+                <a href="https://en.wikipedia.org/wiki/Kashmir">Kashmir</a>
+            </div>
+            <div class="card">
+                <img src="https://static2.tripoto.com/media/transfer/img/OgData/1511856965_ravi_shekhar_365763_fotor.jpg"
+                    alt="Jaipur">
+                <a href="https://en.wikipedia.org/wiki/Jaipur">Jaipur</a>
+            </div>
+            <div class="card">
+                <img src="http://3.bp.blogspot.com/-X3mxyoCF8IQ/UWfpNhhoOLI/AAAAAAAAYiU/pecWKZS3yJk/s1600/Bangalore+Palace.jpg"
+                    alt="Bengaluru">
+                <a href="https://en.wikipedia.org/wiki/Bangalore">Bengaluru</a>
+            </div>
+            <div class="card">
+                <img src="https://www.tipsoftravelling.com/wp-content/uploads/2021/04/leh-ladakh.jpg" alt="Leh">
+                <a href="https://en.wikipedia.org/wiki/Ladakh">Ladakh</a>
+            </div>
+            <div class="card">
+                <img src="https://wallpaperaccess.com/full/537953.jpg" alt="Bali">
+                <a href="https://en.wikipedia.org/wiki/Bali">Bali</a>
+            </div>
+            <div class="card">
+                <img src="https://www.tripsavvy.com/thmb/6TByWDVyX30D-e75dF1KE1nmwtk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-530291126-5947dfbb3df78c537b39b0f8.jpg"
+                    alt="Kerala">
+                <a href="https://en.wikipedia.org/wiki/Kerala">Kerala</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 SkySmart. All Rights Reserved.</p>
+    </footer>
+    <!-- Travel Support Section -->
+
+
+    <!-- Login & sign-up Section -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <p>Please login with your phone number or email to proceed.</p>
+            <input id="loginInput" type="text" placeholder="Enter phone number or email">
+            <input id="loginPassword" type="password" placeholder="Enter your password">
+            <button class="book-button" onclick="validateLogin()">Login</button>
+            <button class="close-modal" onclick="closeLoginModal()">Close</button>
+            <p id="loginErrorMessage" style="color: red; display: none;">Invalid input. Please enter valid credentials.
+            </p>
+        </div>
+    </div>
+
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <h2>Sign Up</h2>
+            <p>Create an account to get started.</p>
+            <input id="signUpEmail" type="text" placeholder="Enter your email">
+            <input id="signUpPhone" type="text" placeholder="Enter your phone number">
+            <input id="signUpPassword" type="password" placeholder="Create a password">
+            <button class="book-button" onclick="validateSignUp()">Sign Up</button>
+            <button class="close-modal" onclick="closeSignUpModal()">Close</button>
+            <p id="signUpErrorMessage" style="color: red; display: none;">Invalid input. Please check your details and
+                try again.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

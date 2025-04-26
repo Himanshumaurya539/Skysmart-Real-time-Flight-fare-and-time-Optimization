@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search Results</title>
+    <link rel="stylesheet" href="/static/results.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- jsPDF & html2canvas CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
+</head>
+<style>
+
+
+
+</style>
+
+<body>
+    <script>
+        function parseDuration(durationStr) {
+            const match = durationStr.match(/(\d+)h\s*(\d+)?m?/);
+            if (!match) return 0;
+            const hours = parseInt(match[1]);
+            const minutes = parseInt(match[2]) || 0;
+            return hours + (minutes / 60);
+        }
+
+        function filterResults() {
+            const priceRange = document.getElementById("priceRange").value;
+            const durationRange = document.getElementById("durationRange").value;
+            const nonStop = document.getElementById("nonStop").checked;
+            const oneStop = document.getElementById("oneStop").checked;
+            const airIndia = document.getElementById("airIndia").checked;
+            const spiceJet = document.getElementById("spiceJet").checked;
+            const indigo = document.getElementById("indigo").checked;
+            const AkasaAir = document.getElementById("AkasaAir").checked;
+
+            const flights = document.querySelectorAll(".flight-card");
+            flights.forEach(flight => {
+                const price = parseInt(flight.dataset.price);
+                const duration = parseDuration(flight.dataset.duration);
+                const airline = flight.dataset.airline;
+                const stops = parseInt(flight.dataset.stops);
+
+                let show = true;
+
+                if (price > priceRange || duration > durationRange) {
+                    show = false;
+                }
+
+                if (nonStop && stops !== 0) {
+                    show = false;
+                }
+
+                if (oneStop && stops !== 1) {
+                    show = false;
+                }
+
+                if (airIndia && airline !== "Air India Express") {
+                    show = false;
+                }
+
+                if (spiceJet && airline !== "SpiceJet") {
+                    show = false;
+                }
+
+                if (indigo && airline !== "Indigo") {
+                    show = false;
+                }
+                if (AkasaAir && airline !== "AkasaAir") {
+                    show = false;
+                }
+
+                flight.style.display = show ? "block" : "none";
+            });
+        }
+
+
+
+
+
+        // Function to fetch flight data from excel file and display it
+        function fetchFlights() {
+            fetch("/get_flights")
+                .then(response => response.json())
+                .then(data => {
+                    let resultsContainer = document.getElementById("results");
+                    resultsContainer.innerHTML = "";
+
+                    data.forEach(flight => {
+                        let flightCard = `
+                    <div class="flight-card" 
+                        data-price="${flight.PRICE}" 
+                        data-duration="${flight.TOTAL_DURATION}" 
+                        data-airline="${flight.AIRLINES}"
+                        data-stops="${flight.STOPS}">
+
+                        <div class="flight-header">
+                            <span>${flight.AIRLINES}</span>
+                            <span>₹${flight.PRICE}</span>
+                        </div>
+                        <div class="flight-body">
+                            <div class="details-row">
+                                <span>Departure: ${flight.FROM} - ${flight.DEPARTURE_TIME}</span>
+                                <span>Arrival: ${flight.TO} - ${flight.ARRIVAL_TIME}</span>
+                            </div>
+                            <div class="details-row">
+                                <span>Duration: ${flight.TOTAL_DURATION}</span>
+                            </div>
+                            <button class="book-button" onclick='showInvoice(${JSON.stringify(flight).replace(/'/g, "&apos;")})'>Book</button>
+                        </div>
+                    </div>
+                    `;
+                        resultsContainer.innerHTML += flightCard;
+                    });
+                })
+                .catch(error => console.error("Error fetching flights:", error));
+        }
+
+        window.onload = fetchFlights;
+
+
+
+
+
+        function showInvoice(flight) {
+            let baseFare = parseFloat(flight.PRICE);
+            let taxes = baseFare * 0.18;
+            let total = baseFare + taxes;
+
+            document.getElementById("invoiceAirline").innerText = flight.AIRLINES;
+            document.getElementById("invoiceDuration").innerText = flight.TOTAL_DURATION;
+            document.getElementById("invoiceFrom").innerText = flight.FROM;
+            document.getElementById("invoiceTo").innerText = flight.TO;
+            document.getElementById("invoiceDeparture").innerText = flight.DEPARTURE_TIME;
+            document.getElementById("invoiceArrival").innerText = flight.ARRIVAL_TIME;
+            document.getElementById("invoiceBaseFare").innerText = baseFare.toFixed(2);
+            document.getElementById("invoiceTaxes").innerText = taxes.toFixed(2);
+            document.getElementById("invoiceTotal").innerText = total.toFixed(2);
+
+            document.getElementById("invoiceModal").style.display = "flex";
+        }
+
+        function closeInvoice() {
+            document.getElementById("invoiceModal").style.display = "none";
+        }
+
+
+
+
+        // Initiate Payment with Razorpay
+        function initiatePayment() {
+            const totalPrice = parseFloat(document.getElementById("invoiceTotal").textContent);
+
+            const options = {
+                key: "rzp_test_s7EUgPgphOJt0T", // Razorpay key
+                amount: totalPrice * 100, // Convert to paisa
+                currency: "INR",
+                name: "Flight Booking",
+                description: "Complete your booking",
+                handler: function (response) {
+                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+                    document.getElementById("downloadInvoiceBtn").style.display = "inline-block";
+                    // closeInvoice();
+                },
+                prefill: {
+                    name: "",
+                    email: "",
+                    contact: "",
+                },
+                theme: {
+                    color: "#007bff",
+                },
+                payment_capture: 1,
+                method: {
+                    card: true,
+                    netbanking: true,
+                    upi: true,
+                    wallet: true
+                },
+            };
+
+            const paymentGateway = new Razorpay(options);
+            paymentGateway.open();
+        }
+
+        function validateAndPay() {
+            const name = document.getElementById("passengerName").value.trim();
+            const email = document.getElementById("passengerEmail").value.trim();
+            const phone = document.getElementById("passengerPhone").value.trim();
+
+            if (!name || !email || !phone) {
+                alert("Please fill all passenger details before proceeding.");
+                return;
+            }
+
+            // Store data to reuse in downloadInvoice()
+            window.passengerDetails = { name, email, phone };
+
+            initiatePayment();
+        }
+
+
+        function downloadInvoice() {
+            const invoiceElement = document.querySelector(".invoice-modal");
+
+            const options = {
+                margin: 0.5,
+                filename: `Flight_Invoice_${new Date().getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            if (window.passengerDetails) {
+                const formSection = document.createElement("div");
+                formSection.innerHTML = `
+        <hr>
+        <h3>Passenger Information</h3>
+        <p><strong>Name:</strong> ${window.passengerDetails.name}</p>
+        <p><strong>Email:</strong> ${window.passengerDetails.email}</p>
+        <p><strong>Phone:</strong> ${window.passengerDetails.phone}</p>
+    `;
+                document.querySelector(".invoice-modal").appendChild(formSection);
+            }
+
+            html2pdf().set(options).from(invoiceElement).save();
+        }
+
+
+    </script>
+
+
+    <header>
+        <div class="nav-container">
+
+            <div class="logo-left">
+                <div class="logo">
+                    <span class="sky">Sky</span><span class="smart">Smart</span>
+                </div>
+            </div>
+
+            <div class="menu-toggle">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="/templates/about.html">ABOUT</a></li>
+                <li><a href="offers.html">OFFERS</a></li>
+                <li><a href="/templates/hotels.html">HOTELS</a></li>
+                <li><a href="/templates/contact.html">CONTACT</a></li>
+            </ul>
+        </div>
+        <!-- Login & Sign-Up / Logout Buttons -->
+        <div class="auth-buttons">
+            {% if session.get('loggedin') %}
+            <span class="welcome-text">👋 Welcome, {{ session['name'] }}!</span>
+            <a href="{{ url_for('logout') }}">
+                <button class="btn logout">Logout</button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('login') }}">
+                <button class="btn login">Login</button>
+            </a>
+            <a href="{{ url_for('signup') }}">
+                <button class="btn signup">Sign Up</button>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- 🔹 Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <div class="filters">
+            <h3>Filters</h3>
+            <div class="price-range">
+                <label>Price Range:</label>
+                <input type="range" id="priceRange" min="3000" max="12000" oninput="filterResults()">
+            </div>
+
+            <div class="duration-range">
+                <label>Duration (hours):</label>
+                <input type="range" id="durationRange" min="1" max="4" oninput="filterResults()">
+            </div>
+
+            <div class="filter-checkbox">
+                <input type="checkbox" id="nonStop" onchange="filterResults()">
+                <label for="nonStop">Non-stop</label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="oneStop" onchange="filterResults()">
+                <label for="oneStop">1 Stop</label>
+            </div>
+
+            <h3>Preferred Airlines</h3>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="airIndia" onchange="filterResults()">
+                <label for="airIndia">Air India Express</label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="spiceJet" onchange="filterResults()">
+                <label for="spiceJet">SpiceJet</label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="indigo" onchange="filterResults()">
+                <label for="indigo">Indigo</label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="AkasaAir" onchange="filterResults()">
+                <label for="AkasaAir">AkasaAir</label>
+            </div>
+
+        </div>
+
+
+
+        <div class="results" id="results">
+            <!-- Flight data will be inserted here dynamically -->
+        </div>
+
+
+
+    </div>
+
+
+    <!-- Advanced Flight Invoice Modal -->
+    <!-- Replace existing .invoice-section and .invoice-actions with this -->
+    <div id="invoiceModal" class="modal" style="display: none;">
+        <div class="modal-content invoice-modal">
+            <span id="closeModal" class="close-btn">&times;</span>
+            <h2 class="invoice-title">Skysmart Invoice</h2>
+            <div class="invoice-section">
+                <!-- Flight Info (same as before) -->
+                <div class="invoice-row">
+                    <div>
+                        <p class="label">Airline</p>
+                        <p id="invoiceAirline" class="value bold"></p>
+                    </div>
+                    <div>
+                        <p class="label">Duration</p>
+                        <p id="invoiceDuration" class="value"></p>
+                    </div>
+                </div>
+
+                <div class="invoice-row">
+                    <div>
+                        <p class="label">From</p>
+                        <p id="invoiceFrom" class="value"></p>
+                    </div>
+                    <div>
+                        <p class="label">To</p>
+                        <p id="invoiceTo" class="value"></p>
+                    </div>
+                </div>
+
+                <div class="invoice-row">
+                    <div>
+                        <p class="label">Departure Time</p>
+                        <p id="invoiceDeparture" class="value"></p>
+                    </div>
+                    <div>
+                        <p class="label">Arrival Time</p>
+                        <p id="invoiceArrival" class="value"></p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Passenger Details Form -->
+                <div class="passenger-form">
+                    <h3>Passenger Details</h3>
+                    <label>Full Name:</label>
+                    <input type="text" id="passengerName" placeholder="Enter your name" required>
+
+                    <label>Email:</label>
+                    <input type="email" id="passengerEmail" placeholder="Enter email" required>
+
+                    <label>Phone:</label>
+                    <input type="tel" id="passengerPhone" placeholder="Enter phone no." required>
+                </div>
+
+                <hr>
+
+                <!-- Price Summary -->
+                <div class="price-breakdown">
+                    <p><span>Base Fare:</span> ₹<span id="invoiceBaseFare"></span></p>
+                    <p><span>Taxes (18% GST):</span> ₹<span id="invoiceTaxes"></span></p>
+                    <p class="total"><span>Total Amount:</span> ₹<span id="invoiceTotal"></span></p>
+                </div>
+            </div>
+
+            <div class="invoice-actions">
+                <button class="action-btn cancel" onclick="closeInvoice()">Close</button>
+                <button class="action-btn pay" onclick="validateAndPay()">Proceed to Payment</button>
+                <button class="action-btn download" id="downloadInvoiceBtn" style="display: none;"
+                    onclick="downloadInvoice()">Download Invoice</button>
+            </div>
+
+
+
+
+</body>
+
+</html>

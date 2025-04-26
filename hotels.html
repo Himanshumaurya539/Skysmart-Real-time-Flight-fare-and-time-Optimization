@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Hotels at Popular Destinations</title>
+  <link rel="stylesheet" href="/static/hotelsstyle.css">
+</head>
+<body>
+     <!-- Navigation Bar -->
+     <header>
+      <div class="nav-container">
+        
+        <div class="logo-left">  
+          <div class="logo">  
+            <span class="sky">Sky</span><span class="smart">Smart</span>  
+          </div>  
+        </div>  
+        
+          <div class="menu-toggle">&#9776;</div>
+          <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="offers.html">OFFERS</a></li>
+            <li><a href="hotels.html">HOTELS</a></li>               
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+      </div>
+
+
+    <!-- login button -->
+    <div class="auth-buttons">
+      {% if session.get('loggedin') %}
+      <span class="welcome-text">👋 Welcome, {{ session['name'] }}!</span>
+      <a href="{{ url_for('logout') }}">
+        <button class="btn logout">Logout</button>
+      </a>
+      {% else %}
+      <a href="{{ url_for('login') }}">
+        <button class="btn login">Login</button>
+      </a>
+      <a href="{{ url_for('signup') }}">
+        <button class="btn signup">Sign Up</button>
+      </a>
+      {% endif %}
+    </div>
+
+  </header>
+
+  <!-- 🔹 Flash Message Section -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="container">
+    <h1 style="color: #063970;">Book Hotels at Popular Destinations</h1>
+    <div class="grid">
+      <!-- Destination Cards -->
+      <div class="card">
+        <img src="https://cdn.britannica.com/37/189837-050-F0AF383E/New-Delhi-India-War-Memorial-arch-Sir.jpg" alt="Delhi">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?area=94663&site_id=1914936&tag=b403dbf5-a1eb-48ca-900e-83e8feb93d41&device=c&network=o&msclkid=eb11faf6519d1d19454f9dc850785ef3&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=vZWeazkboag46ciT">Delhi </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://deih43ym53wif.cloudfront.net/cola-beach-goa-india-shutterstock_772145203_82b97bd9df.jpeg" alt="Goa">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=11304&site_id=1914935&tag=c9c2b3f0-2c8f-20ad-8e18-d1c75e1b9f3c&device=c&network=o&msclkid=7a6f51d2191b139fc5fe36ec18a1012b&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=E5mGESDI6QD4Z3vN"> Goa </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://cdn.britannica.com/26/84526-050-45452C37/Gateway-monument-India-entrance-Mumbai-Harbour-coast.jpg" alt="Mumbai">
+        <div class="details">
+          <h2> <a href="https://www.agoda.com/en-in/search?city=16850&site_id=1914936&tag=6ed353db-8082-4b9b-88ba-4ce6b8d17879&device=c&network=o&msclkid=8506b420e72c106917c7d31ee66f4816&pslc=1&ds=AdDyyh0xw5KPtQv4"> Mumbai </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="http://pix6.agoda.net/hotelImages/492/49242/49242_15070817200031891918.jpg?s=1100x825" alt="Shimla">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=2112&site_id=1914936&tag=98c7140a-14b2-43bd-9ed5-1a27223960b3&device=c&network=o&msclkid=f12404fb9bd9164851e163c599dd6a3a&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=lZ0KswTe%2FZ%2B37ti3">Shimla </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1200/103715926.jpg?k=a3e81a5dd3214f0041848b1743f4032f75c8de14c53193b1b6eb5d4150573328&o=" alt="Manali">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=9028&site_id=1914936&tag=08326924-2426-44c6-8010-7c161c65e760&device=c&network=o&msclkid=b47780ecc674164d2485e7d2c4f7d7ec&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=kIjGvNAoZ%2F3ScVl0">Shimla</a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://www.tripsavvy.com/thmb/m8DyHATyaeIcrWwfLOWyOfFpLd0=/2124x1412/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-145094250-5b0a8c3bba61770036b7827b.jpg" alt="Hyderabad">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=8801&site_id=1914936&tag=86ac2fc0-49c0-448c-8ab7-2766b8697f07&device=c&network=o&msclkid=f6c5a35ac62916af7a1fc464c49134fc&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=thII%2FVeHAeogUwCT"> Hyderabad</a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://content.skyscnr.com/6444159c8f0ec14c96012de8a2502245/eyeem-26693940-86115263.jpg" alt="Chennai">
+        <div class="details">
+          <h2> <a href="https://www.agoda.com/en-in/search?city=17269&site_id=1914936&tag=26471b42-a4bc-4030-8e28-ec36f446320d&device=c&network=o&msclkid=6c3ba82c432311bdc0cecf1240b5142e&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=HORvOwgHu7n5jSVu"> Chennai </a> </h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://static2.tripoto.com/media/transfer/img/OgData/1500874108_victoria_memorial_hall_kolkata.jpg" alt="Kolkata">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=6241&site_id=1914936&tag=9584cb59-3707-4c45-867d-847994931e92&device=c&network=o&msclkid=29ef777a329514c6a84d1044317cef9f&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=x4fTQsg3bL3ayVXA"> Kolkata </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://static2.tripoto.com/media/transfer/img/OgData/1511856965_ravi_shekhar_365763_fotor.jpg" alt="Jaipur">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=8845&site_id=1914936&tag=e7664c5c-b5c6-4a99-a3c7-10a28dc42691&device=c&network=o&msclkid=bb4c0eee35c51c8d255969d031d7dd58&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=r8%2F3UO5zN9%2F6jbqS"> Jaipur </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://www.tripsavvy.com/thmb/jQWlo8De0KDjeXPQd1ie-5Q7JeY=/2116x1417/filters:fill(auto,1)/GettyImages-521733846_Darkroom-125adbb08a044a2db915fefc1eb741b2.jpg" alt="Pune">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=16854&site_id=1914936&tag=8b0fe2a1-8810-46f2-a6bb-a0e7c67c9d85&device=c&network=o&msclkid=91670a97a16816c319636da9a5eceeef&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=I9Nck6SW9dpAn5hW"> Pune </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://media.tripinvites.com/places/gurugram/dlf-building-gurugram-featured.jpg" alt="Gurugram">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=17279&site_id=1914936&tag=f061b639-ff4d-47ac-a49b-fc4a70a3da7d&device=c&network=o&msclkid=9ab5930424c7181e2c96f43a2062fa0e&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=AErtmoMhUSSSJBxc"> Gurugram </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://www.gujarattourism.com/content/gujrattourism/en/central-zone/ahmedabad/atal-bridge/_jcr_content/root/responsivegrid/detailbannercrop.coreimg.jpeg/1669021323808/atalbridgeday1.jpeg" alt="Ahmedabad">
+        <div class="details">
+          <h2><a href="https://www.agoda.com/en-in/search?city=6613&site_id=1914936&tag=f0006c99-fa71-4ba5-a1d3-526845d3bf2f&device=c&network=o&msclkid=8802171ccf2e1d411a007022c78489d6&checkIn=2024-11-29&checkOut=2024-11-30&adults=1&rooms=1&pslc=1&ds=WG6fusJ3wFPpMyIo"> Ahemdabad </a></h2>
+          <p>Hotels, Budget Hotels, 3 Star Hotels,<br>4 Star Hotels, 5 Star Hotels</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

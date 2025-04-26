@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Booking</title>
+  <link rel="stylesheet" href="/static/aboutstyle.css">
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+
+      <div class="logo-left">
+        <div class="logo">
+          <span class="sky">Sky</span><span class="smart">Smart</span>
+        </div>
+      </div>
+
+      <div class="menu-toggle">&#9776;</div>
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="offers.html">OFFERS</a></li>
+        <li><a href="hotels.html">HOTELS</a></li>
+        <li><a href="contact.html">CONTACT</a></li>
+      </ul>
+    </div>
+
+    <!-- login button -->
+    <div class="auth-buttons">
+      {% if session.get('loggedin') %}
+      <span class="welcome-text">👋 Welcome, {{ session['name'] }}!</span>
+      <a href="{{ url_for('logout') }}">
+        <button class="btn logout">Logout</button>
+      </a>
+      {% else %}
+      <a href="{{ url_for('login') }}">
+        <button class="btn login">Login</button>
+      </a>
+      <a href="{{ url_for('signup') }}">
+        <button class="btn signup">Sign Up</button>
+      </a>
+      {% endif %}
+    </div>
+  </header>
+
+
+  <!-- 🔹 Flash Message Section -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+
+  <section class="why-book">
+    <h2>Why book with us?</h2>
+    <div class="features">
+      <div class="feature">
+        <img src="https://www.pngkey.com/png/full/7-72124_airplane-aircraft-icon-vector-cartoon-plane-png.png"
+          alt="Easy Booking">
+        <h3>Easy Booking</h3>
+        <p>We offer easy and convenient flight bookings with attractive offers.</p>
+      </div>
+      <div class="feature">
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/009/779/826/original/sales-promotion-cartoon-web-icon-marketing-strategy-rebate-advertising-discount-offer-low-price-idea-clearance-sale-customer-attraction-illustration-vector.jpg"
+          alt="Lowest Price">
+        <h3>Lowest Price</h3>
+        <p>We ensure low rates on hotel reservation, holiday packages and on flight tickets.</p>
+      </div>
+      <div class="feature">
+        <img src="https://cdn-icons-png.flaticon.com/512/2199/2199955.png" alt="Exciting Deals">
+        <h3>Exciting Deals</h3>
+        <p>Enjoy exciting deals on flights, hotels, buses, car rental and tour packages.</p>
+      </div>
+      <div class="feature">
+        <img src="https://cdn4.iconfinder.com/data/icons/contact-us-set-1-7/64/Contact_us_1-09-1024.png"
+          alt="24/7 Support">
+        <h3>24/7 Support</h3>
+        <p>Get assistance 24/7 on any kind of travel-related query. We are happy to assist you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-section">
+    <h3>SkySmart</h3>
+    <p>
+      SkySmart is transforming the way travelers approach flight booking by providing an advanced platform that
+      seamlessly
+      combines real-time data analysis with intelligent route optimization. Our goal is simple: to make flight booking
+      more efficient,
+      cost-effective, and tailored to each traveler's unique needs. By utilizing sophisticated algorithms, we can
+      present a range of
+      flight options, factoring in not only the lowest costs but also the shortest travel times and optimal layover
+      durations. Whether
+      you're planning a business trip or a vacation, SkySmart offers comprehensive solutions to ensure you make the best
+      decision based on
+      your priorities.
+    </p>
+    <p>
+      At the core of our platform is the integration with major airlines and third-party booking services,
+      which ensures that our users always have access to the most current fares, schedules, and availability.
+      With SkySmart, there are no hidden fees or surprises we pride ourselves on offering clear, transparent pricing so
+      that you can make
+      informed choices without the stress of unexpected costs. Our user-friendly interface is designed for simplicity
+      and speed, allowing
+      travelers to quickly narrow down their options and finalize bookings in just a few clicks.
+    </p>
+
+    <p>
+      In every aspect, SkySmart is driven by a commitment to efficiency, transparency, and innovation. We continuously
+      update our platform,
+      using the latest advancements in technology to enhance your travel planning experience. By taking the guesswork
+      out of flight booking
+      and presenting you with optimized routes that save both time and money, SkySmart is the travel companion you've
+      always needed. We're
+      here to help you travel smarter, faster, and more affordably, no matter where you're headed.
+    </p>
+
+    <footer>
+      <p>&copy; 2024 SkySmart. All Rights Reserved.</p>
+    </footer>
+  </section>
+</body>
+
+</html>

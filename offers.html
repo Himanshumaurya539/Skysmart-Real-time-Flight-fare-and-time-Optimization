@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers - Flight Booking</title>
+    <link rel="stylesheet" href="\static\offers.css">
+</head>
+<script>
+    // Login session
+    function openLoginModal() {
+        document.getElementById("loginModal").style.display = "flex";
+    }
+
+    function validateLogin() {
+        const loginInput = document.getElementById('loginInput').value.trim();
+        const loginPassword = document.getElementById('loginPassword').value.trim();
+        const errorMessage = document.getElementById('loginErrorMessage');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/;
+
+        if (!loginInput || !loginPassword) {
+            errorMessage.textContent = "All fields are required.";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        if ((emailRegex.test(loginInput) || phoneRegex.test(loginInput)) && loginPassword.length >= 6) {
+            errorMessage.style.display = 'none';
+            alert('Login successful!');
+            closeLoginModal();
+        } else {
+            errorMessage.textContent = "Invalid email, phone number, or password.";
+            errorMessage.style.display = 'block';
+        }
+    }
+
+
+    function openSignUpModal() {
+        document.getElementById("signUpModal").style.display = "flex";
+    }
+    function validateSignUp() {
+        const email = document.getElementById('signUpEmail').value.trim();
+        const phone = document.getElementById('signUpPhone').value.trim();
+        const password = document.getElementById('signUpPassword').value.trim();
+        const errorMessage = document.getElementById('signUpErrorMessage');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/;
+
+        if (!email || !phone || !password) {
+            errorMessage.textContent = "All fields are required.";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            errorMessage.textContent = "Invalid email format.";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        if (!phoneRegex.test(phone)) {
+            errorMessage.textContent = "Phone number must be 10 digits.";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        if (password.length < 6) {
+            errorMessage.textContent = "Password must be at least 6 characters long.";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        errorMessage.style.display = 'none';
+        alert('Sign-up successful!');
+        closeSignUpModal();
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+    }
+
+    function closeSignUpModal() {
+        document.getElementById('signUpModal').style.display = 'none';
+    }
+</script>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <div class="nav-container">
+
+            <div class="logo-left">
+                <div class="logo">
+                    <span class="sky">Sky</span><span class="smart">Smart</span>
+                </div>
+            </div>
+
+            <div class="menu-toggle">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="offers.html">OFFERS</a></li>
+                <li><a href="hotels.html">HOTELS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </div>
+
+        <!-- login button -->
+        <div class="auth-buttons">
+            {% if session.get('loggedin') %}
+            <span class="welcome-text">👋 Welcome, {{ session['name'] }}!</span>
+            <a href="{{ url_for('logout') }}">
+                <button class="btn logout">Logout</button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('login') }}">
+                <button class="btn login">Login</button>
+            </a>
+            <a href="{{ url_for('signup') }}">
+                <button class="btn signup">Sign Up</button>
+            </a>
+            {% endif %}
+        </div>
+
+    </header>
+
+    <!-- 🔹 Flash Message Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <h1 style="color: #063970;">Exclusive Travel Offers</h1>
+        <div class="offers-grid">
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/axis-df-04042023.jpg" alt="Offer 1">
+                <h2>Up to 25% OFF + Additional Savings on EMI</h2>
+                <p>For flights, hotels, holiday packages, cabs & buses.</p>
+                <span class="expiry">Expires on 28 Apr</span>
+                <a href="https://www.makemytrip.com/promos/axis-emi-offers-021123.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/if-bg-11012024.jpg" alt="Offer 2">
+                <h2>Get Live Assistance from Travel Experts</h2>
+                <p>For international flight bookings. Call us @ 0124 4781869.</p>
+                <span class="expiry">Expires on 31 May</span>
+                <a href="https://www.makemytrip.com/promos/if-trip-120124.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/hsbc-bank-bg-04042024.jpg" alt="Offer 3">
+                <h2>Up to 35% OFF + Interest-Free EMI</h2>
+                <p>On flights, hotels & holiday ,<br> packages.</p>
+                <span class="expiry">Expires on 30 Apr</span>
+                <a href="https://www.makemytrip.com/promos/hsbc-emi-offers-apr22.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/icici-bg-31072024.jpg" alt="Offer 4">
+                <h2>Grab Up to ₹4000 OFF</h2>
+                <p>On Flights, Hotels, Holiday Packages,<br> Buses & Cabs.</p>
+                <span class="expiry">Expires on 31 Apr</span>
+                <a href="https://www.makemytrip.com/promos/icici-nce-19072024.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/airindia-express-bg-12122023.jpg" alt="Offer 5">
+                <h2>For Domestic & Int’l Flights: Up to 30% OFF</h2>
+                <p>On Business Class Bookings with Air India Express.</p>
+                <span class="expiry">Expires on 15 Apr</span>
+                <a href="" class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/ChicletBG-Dubai-Cruise-30Sep.jpg" alt="Offer 6">
+                <h2>Get, Set, Sail with Our Cruise Holiday Packages!</h2>
+                <p>Plan your holiday.</p>
+                <span class="expiry">Expires on 30 Apr</span>
+                <a href="https://www.makemytrip.com/promos/cruise-holidays-packages-v1.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/federal-bg-16052024.jpg" alt="Offer 6">
+                <h2>Up to 25% OFF* + INTEREST-FREE* EMI</h2>
+                <p>on flights, hotels & holiday packages.</p>
+                <span class="expiry">Expires on 30 May</span>
+                <a href="https://www.makemytrip.com/promos/federal-offer-050624.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/bg-hdfc-20112023.jpg" alt="Offer 6">
+                <h2>Up to 25% OFF*</h2>
+                <p>on International Hotels and Holiday Packages.</p>
+                <span class="expiry">Expires on 30 May</span>
+                <a href="https://www.makemytrip.com/promos/hdfc-hotels-emi-offer-110624.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+            <div class="offer-card">
+                <img src="https://promos.makemytrip.com/appfest/2x/ChicletBG-CharDham-12Jun.jpg" alt="Offer 6">
+                <h2>For Your Char Dham Yatra:</h2>
+                <p>Book Comfortable Cabs with Personalized Itineraries!</p>
+                <span class="expiry">Expires on 30 May</span>
+                <a href="https://www.makemytrip.com/promos/offers/char-dham-yatra-210624.html?detail_image=no"
+                    class="view-details">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login & sign-up Section -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <p>Please login with your phone number or email to proceed.</p>
+            <input id="loginInput" type="text" placeholder="Enter phone number or email">
+            <input id="loginPassword" type="password" placeholder="Enter your password">
+            <button class="book-button" onclick="validateLogin()">Login</button>
+            <button class="close-modal" onclick="closeLoginModal()">Close</button>
+            <p id="loginErrorMessage" style="color: red; display: none;">Invalid input. Please enter valid credentials.
+            </p>
+        </div>
+    </div>
+
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <h2>Sign Up</h2>
+            <p>Create an account to get started.</p>
+            <input id="signUpEmail" type="text" placeholder="Enter your email">
+            <input id="signUpPhone" type="text" placeholder="Enter your phone number">
+            <input id="signUpPassword" type="password" placeholder="Create a password">
+            <button class="book-button" onclick="validateSignUp()">Sign Up</button>
+            <button class="close-modal" onclick="closeSignUpModal()">Close</button>
+            <p id="signUpErrorMessage" style="color: red; display: none;">Invalid input. Please check your details and
+                try again.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
